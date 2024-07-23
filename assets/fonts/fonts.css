@@ -1,0 +1,48 @@
+@font-face {
+  font-family: Gilroy;
+  src: url('./Gilroy-Light.ttf') format('truetype');
+  font-weight: 300; /* Adjust the weight range based on your font */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Gilroy;
+  src: url('./Gilroy-Regular.ttf') format('truetype');
+  font-weight: 400; /* Adjust the weight range based on your font */
+  font-style: normal;
+}
+  
+@font-face {
+  font-family: Gilroy;
+  src: url('./Gilroy-Bold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Lexend;
+  src: url('./Lexend-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100; /* Adjust the weight range based on your font */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Lexend;
+  src: url('./Lexend-VariableFont_wght.ttf') format('truetype');
+  font-weight: 300; /* Adjust the weight range based on your font */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Lexend;
+  src: url('./Lexend-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400; /* Adjust the weight range based on your font */
+  font-style: normal;
+}
+  
+@font-face {
+  font-family: Lexend;
+  src: url('./Lexend-VariableFont_wght.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}

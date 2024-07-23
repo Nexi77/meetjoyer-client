@@ -1,0 +1,68 @@
+.formkit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.formkit-wrapper {
+    text-align: left;
+}
+
+label.formkit-label {
+    text-align: left;
+    font-weight: 300;
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="text"].formkit-input,
+input[type="password"].formkit-input,
+input[type="email"].formkit-input,
+input[type="number"].formkit-input {
+    background-color: var(--white-400);
+    border-radius: var(--base-radius);
+    border: 0;
+    width: 100%;
+    padding: 1rem;
+}
+
+.formkit-messages {
+    padding: 0;
+    list-style-type: none;
+    margin-top: 5px;
+
+    li {
+        color: var(--asset-400);
+        font-size: var(--font-size-sm);
+
+        &::first-letter {
+            text-transform: capitalize;
+        }
+    }
+}
+
+.formkit-form > .formkit-messages {
+    text-align: center;
+}
+
+.formkit-outer:has(li[data-message-type="validation"]) input[type="text"],
+.formkit-outer:has(li[data-message-type="validation"]) input[type="password"],
+.formkit-outer:has(li[data-message-type="validation"]) input[type="email"],
+.formkit-outer:has(li[data-message-type="validation"]) input[type="number"] {
+    box-shadow: 0 0 0 3px var(--asset-400);
+}
+
+button.formkit-input[type="submit"]{
+    width: 100%;
+    padding: 0.8rem;
+    border: 0;
+    margin-top: 20px;
+    border-radius: var(--base-radius);
+    background: var(--asset-400);
+    color: var(--white-400);
+    transition: background 0.3s ease;
+
+    &:hover {
+        background: var(--asset-400-hover)
+    }
+}

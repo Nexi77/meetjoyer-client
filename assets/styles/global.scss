@@ -1,0 +1,61 @@
+:root {
+--primary-400: #2B2C4B;
+--primary-300: #3A3B5A;
+--white-400: #fff;
+--asset-300: #F47D99;
+--asset-400: #DF6783;
+
+// hover colors
+--asset-400-hover: #E18894;
+
+// typography
+--font-size-sm: clamp(0.75rem, 0.6842rem + 0.3509vw, 1rem);
+
+// sizes
+--base-radius: 10px;
+}
+
+body {
+    font-family: Lexend, sans-serif;
+    background: linear-gradient(180deg, var(--primary-300) 0%, var(--primary-400) 100%);
+    font-size: 18px;
+    color: var(--white-400);
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: Gilroy, sans-serif;
+}
+
+button {
+    cursor: pointer;
+}
+
+.full-screen-site {
+    min-height: 100vh;
+}
+
+/* stylelint-disable-next-line selector-id-pattern */
+#__nuxt {
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.centered-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-section {
+    text-align: center;
+
+    h1 {
+        text-transform: uppercase;
+        font-size: 2.75rem;
+    }
+
+    p {
+        font-weight: 100;
+        font-size: 1.125rem;
+    }
+}
