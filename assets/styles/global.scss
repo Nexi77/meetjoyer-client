@@ -18,7 +18,7 @@
 body {
     font-family: Lexend, sans-serif;
     background: linear-gradient(180deg, var(--primary-300) 0%, var(--primary-400) 100%);
-    font-size: 18px;
+    font-size: clamp(1.125rem, 1.0428rem + 0.4386vw, 1.4375rem);
     color: var(--white-400);
 }
 
@@ -51,11 +51,10 @@ button {
 
     h1 {
         text-transform: uppercase;
-        font-size: 2.75rem;
+        font-size: clamp(2.25rem, 2.0526rem + 1.0526vw, 3rem);
     }
 
     p {
         font-weight: 100;
-        font-size: 1.125rem;
     }
 }
