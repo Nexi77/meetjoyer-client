@@ -34,18 +34,17 @@ async function onSubmit(data: FormData, node: FormKitNode)
 </script>
 
 <template>
-    <div>Register</div>
-    <!-- <main>
-        <Card>
-            <h2>Register</h2>
-            <FormKit type="form" submit-label="Sign Up" @submit="onSubmit">
+    <main>
+        <fieldset class="signup-form form-section">
+            <FormKit type="form" submit-label="Signup" @submit="onSubmit">
+                <h1>Signup</h1>
+                <p>Join our community today! Create your account to get started with exclusive events.</p>
                 <FormKit
                     id="email"
                     type="email"
                     name="email"
                     label="Email"
-                    placeholder="johnsmith@gmail.com"
-                    prefix-icon="email"
+                    placeholder=""
                     validation="required|email"
                     validation-visibility="blur"
                 />
@@ -54,7 +53,6 @@ async function onSubmit(data: FormData, node: FormKitNode)
                     type="password"
                     name="password"
                     label="Password"
-                    prefix-icon="password"
                     validation="required|passwordRule"
                     :validation-rules="{ passwordRule }"
                     validation-visibility="blur"
@@ -67,7 +65,6 @@ async function onSubmit(data: FormData, node: FormKitNode)
                     type="password"
                     name="passwordConfirm"
                     label="Confirm password"
-                    prefix-icon="password"
                     validation="required|confirm:password"
                     validation-visibility="blur"
                     validation-label="Passwords"
@@ -78,6 +75,6 @@ async function onSubmit(data: FormData, node: FormKitNode)
                     </NuxtLink>
                 </div>
             </FormKit>
-        </Card>
-    </main> -->
+        </fieldset>
+    </main>
 </template>

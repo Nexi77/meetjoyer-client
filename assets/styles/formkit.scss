@@ -30,7 +30,8 @@ input[type="number"].formkit-input {
     padding: 0;
     list-style-type: none;
     margin-top: 5px;
-
+    margin-bottom: 0;
+    
     li {
         color: var(--asset-400);
         font-size: var(--font-size-sm);

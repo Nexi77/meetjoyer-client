@@ -32,7 +32,7 @@ async function onSubmit(data: FormData, node: FormKitNode)
 <template>
     <main>
         <fieldset class="login-form form-section">
-            <FormKit type="form" submit-label="Signup" @submit="onSubmit">
+            <FormKit type="form" submit-label="Signin" @submit="onSubmit">
                 <h1>Login</h1>
                 <p>Welcome back! Please enter your details to continue.</p>
                 <FormKit
@@ -52,6 +52,11 @@ async function onSubmit(data: FormData, node: FormKitNode)
                     validation="required"
                     validation-visibility="blur"
                 />
+                <div class="link-wrapper">
+                    <NuxtLink to="register" class="link">
+                        New here? Signup!
+                    </NuxtLink>
+                </div>
             </FormKit>
         </fieldset>
     </main>

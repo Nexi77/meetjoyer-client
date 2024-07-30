@@ -1,4 +1,4 @@
-export const passwordRule = (node: Ref<string>) =>
+export const passwordRule = (node: FormKitNode) =>
 {
-    return isPasswordValid(node.value);
+    return isPasswordValid(node.value as string);
 };
