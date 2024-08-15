@@ -10,7 +10,7 @@ interface TokenData {
 
 export default defineNuxtRouteMiddleware((to) =>
 {
-    const api = useApi();
+    const { $api } = useNuxtApp();
     const { ssrContext } = useNuxtApp();
     const authStore = useAuthStore();
 
@@ -19,7 +19,14 @@ export default defineNuxtRouteMiddleware((to) =>
         const token = useCookie('token');
 
         authStore.token = token.value || '';
-        api.setHeader((ssrContext?.event.node.req.headers as Record<string, string>) ?? {});
+
+        if (token.value)
+            $api.setHeader({ ...ssrContext?.event.node.req.headers, Authorization: `Bearer ${authStore.token.value}` });
+    }
+
+    if (authStore.token)
+    {
+        $api.setHeader({ Authorization: `Bearer ${authStore.token}` });
     }
 
     if (!authStore.user && authStore.token)

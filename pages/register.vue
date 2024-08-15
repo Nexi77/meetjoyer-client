@@ -11,13 +11,15 @@ interface FormData {
     confirmPassword: string;
 }
 
+const { $api } = useNuxtApp();
+
 async function onSubmit(data: FormData, node: FormKitNode)
 {
     const { $toast } = useNuxtApp();
 
     try
     {
-        await useApi().post<Tokens>('auth/local/signup', data);
+        await $api.post<Tokens>('auth/local/signup', data);
         $toast.success('Your registration is complete, you can now log in');
         navigateTo('/login');
     }

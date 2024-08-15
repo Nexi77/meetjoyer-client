@@ -10,11 +10,22 @@ interface FormData {
     password: string;
 }
 
+const authStore = useAuthStore();
+const { $api } = useNuxtApp();
+
 async function onSubmit(data: FormData, node: FormKitNode)
 {
     try
     {
-        await useAuthLogin(data.email, data.password);
+        const tokens = await $api.post<Tokens>('auth/local/signin', { email: data.email, password: data.password });
+
+        authStore.token = tokens.access_token;
+        localStorage.setItem('refresh_token', tokens.refresh_token);
+
+        const tokenCookie = useCookie('token', { maxAge: 60 * 1000 * 15 });
+
+        tokenCookie.value = tokens.access_token;
+        navigateTo('/');
     }
     catch (error)
     {
