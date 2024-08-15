@@ -1,12 +1,20 @@
 import { acceptHMRUpdate, defineStore } from 'pinia';
+import type { Role } from '~/types/global';
 
+export interface UserData {
+    id: number;
+    email: string;
+    roles: Role[];
+}
 export interface AuthState {
     token: string;
+    user: UserData | null;
 }
 
 export const useAuthStore = defineStore('authStore', {
     state: (): AuthState => ({
-        token: ''
+        token: '',
+        user: null
     })
 });
 

@@ -1,11 +1,11 @@
 <template>
-    <section class="full-screen-site centered-section">
+    <div class="full-screen-site centered-section">
         <slot />
-    </section>
+    </div>
 </template>
 
 <style lang="scss" scoped>
-section {
+div {
     background-image: url('@images/bg_waves.svg');
     background-repeat: no-repeat;
     background-size: 120% 150%;

@@ -1,3 +1,13 @@
+import { jwtDecode } from 'jwt-decode';
+import type { UserData } from '~/stores/auth';
+import type { Role } from '@/types/global';
+
+interface TokenData {
+    sub: number;
+    email: string;
+    roles: Role[];
+}
+
 export default defineNuxtRouteMiddleware((to) =>
 {
     const api = useApi();
@@ -10,6 +20,14 @@ export default defineNuxtRouteMiddleware((to) =>
 
         authStore.token = token.value || '';
         api.setHeader((ssrContext?.event.node.req.headers as Record<string, string>) ?? {});
+    }
+
+    if (!authStore.user && authStore.token)
+    {
+        const tokenData = jwtDecode<TokenData>(authStore.token);
+        const userModel: UserData = { id: tokenData.sub, email: tokenData.email, roles: tokenData.roles };
+
+        authStore.user = userModel;
     }
 
     const isUnauthorizedPage = ['login', 'register'].includes((to.name ?? '') as string);
