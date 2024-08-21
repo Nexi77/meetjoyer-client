@@ -14,14 +14,14 @@ export default defineNuxtRouteMiddleware((to) =>
     const { ssrContext } = useNuxtApp();
     const authStore = useAuthStore();
 
+    const token = useCookie('token');
+
     if (process.server)
     {
-        const token = useCookie('token');
-
         authStore.token = token.value || '';
 
         if (token.value)
-            $api.setHeader({ ...ssrContext?.event.node.req.headers, Authorization: `Bearer ${authStore.token.value}` });
+            $api.setHeader({ ...ssrContext?.event.node.req.headers as Record<string, unknown>, Authorization: `Bearer ${token.value}` });
     }
 
     if (authStore.token)

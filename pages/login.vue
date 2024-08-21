@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FetchErrorWithMessage } from '~/types/api';
+import type { FetchErrorWithMessage, Tokens } from '~/types/api';
 
 definePageMeta({
     layout: 'logged-out'

@@ -2,6 +2,7 @@
 --primary-400: #2B2C4B;
 --primary-300: #3A3B5A;
 --white-400: #fff;
+--black-400: #222;
 --asset-300: #F47D99;
 --asset-400: #DF6783;
 --accent-400: #292A49;
@@ -18,6 +19,7 @@
 
 // sizes
 --base-radius: 10px;
+--base-radius2: calc(var(--base-radius) * 2);
 }
 
 body {
@@ -70,4 +72,15 @@ button {
     color: inherit;
     font-size: 1rem;
     font-family: Lexend, sans-serif;
+}
+
+.label-with-icon {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    svg {
+        width: 30px;
+        aspect-ratio: 1;
+    }
 }

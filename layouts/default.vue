@@ -26,6 +26,6 @@ const isMenuOpened = ref(false);
 }
 
 .content {
-    padding: 10px 20px;
+    padding: 20px;
 }
 </style>
