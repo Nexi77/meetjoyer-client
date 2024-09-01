@@ -8,16 +8,23 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const storeApp = useAppStore();
 const { $api, $toast } = useNuxtApp();
 const events = ref<EventModel[]>([]);
+const route = useRoute();
+const page = Number(route.query.page) || 1;
+const pager = computed(() => storeApp.pagers[`events-${props.type}`]);
+
+createPager(`events-${props.type}`, page);
 
 async function fetchEvents()
 {
     try
     {
-        const response = await $api.get<PaginatedResource<EventModel>>('events', { type: props.type });
+        const response = await $api.get<PaginatedResource<EventModel>>('events', { type: props.type, page: pager.value?.page, limit: pager.value?.limit });
 
         events.value = response.data;
+        updatePager(`events-${props.type}`, response);
     }
     catch (error)
     {
@@ -35,6 +42,7 @@ fetchEvents();
     <div class="events-list">
         <EventsCard v-for="event in events" :key="event.id" :event="event" />
     </div>
+    <ListsPagination :pager-indentifier="`events-${type}`" @change="fetchEvents" />
 </template>
 
 <style lang="scss" scoped>
