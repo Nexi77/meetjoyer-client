@@ -57,7 +57,6 @@ provide('selectedIndex', selectedIndex);
     }
 
     li:not(:last-child)::after {
-        content: '';
         display: inline-block;
         height: 100%;
         position: absolute;
@@ -65,6 +64,10 @@ provide('selectedIndex', selectedIndex);
         left: calc(100% + 8.5px);
         border-radius: var(--base-radius);
         background-color: var(--white-400);
+
+        @media screen and (width >= 680px) {
+            content: '';
+        }
     }
 
     .tab-header {
@@ -72,6 +75,7 @@ provide('selectedIndex', selectedIndex);
         text-align: center;
         font-weight: bold;
         border: 0;
+        width: 100%;
         border-radius: var(--base-radius);
         transition: background-color 0.3s ease;
 

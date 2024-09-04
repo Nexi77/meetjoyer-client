@@ -41,6 +41,8 @@ export interface EventModel {
     id: number;
     name: string;
     location: string;
+    startDate: string;
+    endDate: string;
     eventType: typeof EventType;
     organiser: UserData;
     lectures: LectureModel[];
