@@ -5,6 +5,7 @@ export interface UserData {
     id: number;
     email: string;
     roles: Role[];
+    image?: string;
 }
 export interface AuthState {
     token: string;

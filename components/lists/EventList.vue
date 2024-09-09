@@ -24,10 +24,12 @@ async function fetchEvents(filters?: Record<string, unknown>)
     {
         loading.value = true;
 
-        const response = await $api.get<PaginatedResource<EventModel>>('events', { type: props.type, page: pager.value?.page, limit: pager.value?.limit, ...filters });
+        const { data } = await useAsyncData(() => $api.get<PaginatedResource<EventModel>>('events', { type: props.type, page: pager.value?.page, limit: pager.value?.limit, ...filters }));
 
-        events.value = response.data;
-        updatePager(`events-${props.type}`, response);
+        if (!data.value) return;
+
+        events.value = data.value?.data;
+        updatePager(`events-${props.type}`, data.value);
     }
     catch (error)
     {

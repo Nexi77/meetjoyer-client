@@ -47,4 +47,6 @@ export interface EventModel {
     organiser: UserData;
     lectures: LectureModel[];
     image: string | null;
+    description: string;
+    participantsNumber: number;
 }

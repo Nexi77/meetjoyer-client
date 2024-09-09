@@ -18,7 +18,7 @@ const eventImage = computed(() => props.event.image ?? PlaceholderImage);
 </script>
 
 <template>
-    <NuxtLink class="event-card" to="events">
+    <NuxtLink class="event-card" :to="`events/${event.id}`">
         <div class="image-wrapper">
             <img :src="eventImage" alt="">
         </div>

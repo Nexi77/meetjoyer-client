@@ -1,6 +1,7 @@
 :root {
 --primary-400: #2B2C4B;
 --primary-300: #3A3B5A;
+--primary-100: rgb(255 255 255 / 20%);
 --white-400: #fff;
 --black-400: #222;
 --asset-300: #F47D99;
@@ -84,3 +85,29 @@ button {
         aspect-ratio: 1;
     }
 }
+
+/* Chrome, Edge, Safari (WebKit Browsers) */
+::-webkit-scrollbar {
+    width: 8px;            /* Width of the scrollbar */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color of the scrollbar thumb */
+    border-radius: 10px;    /* Rounded corners for the scrollbar thumb */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Darker color on hover */
+  }
+  
+  /* Firefox */
+  * {
+    scrollbar-width: thin;  /* Thin scrollbar */
+    scrollbar-color: #888 #f1f1f1; /* Thumb color and track color */
+  }
+  
+  /* Optional: Style the scrollbar track for WebKit browsers */
+  ::-webkit-scrollbar-track {
+    background-color: #f1f1f1;  /* Background color of the scrollbar track */
+    border-radius: 10px;        /* Rounded corners for the scrollbar track */
+  }

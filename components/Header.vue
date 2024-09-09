@@ -24,6 +24,7 @@ header {
     border: 0;
     width: 40px;
     position: relative;
+    z-index: 101;
     flex-direction: column;
     margin-left: auto;
     gap: 5px;

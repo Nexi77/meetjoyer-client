@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     alias: {
         '@images': fileURLToPath(new URL('./assets/images', import.meta.url))
     },
-    modules: ['@formkit/nuxt', '@pinia/nuxt'],
+    modules: ['@formkit/nuxt', '@pinia/nuxt', '@nuxtjs/leaflet'],
     formkit: {
         // Experimental support for auto loading (see note):
         autoImport: true
