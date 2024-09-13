@@ -85,7 +85,7 @@ provide('selectedIndex', selectedIndex);
 
         &.active {
             background-color: var(--asset-400);
-            color: var(--whit-400);
+            color: var(--white-400);
 
             &:hover {
                 background-color: var(--asset-400-hover);

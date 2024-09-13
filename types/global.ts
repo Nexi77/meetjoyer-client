@@ -21,3 +21,12 @@ export interface Option<V = string>
     value: V;
     text: string;
 }
+
+export const EVENT_TYPE = {
+    CONFERENCE: 'CONFERENCE',
+    MONASTERY: 'MONASTERY',
+    WORKSHOP: 'WORKSHOP',
+    MEETUP: 'MEETUP'
+} as const;
+
+export type EventType = typeof EVENT_TYPE[keyof typeof EVENT_TYPE];

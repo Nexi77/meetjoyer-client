@@ -18,12 +18,16 @@ label.formkit-label {
 input[type="text"].formkit-input,
 input[type="password"].formkit-input,
 input[type="email"].formkit-input,
-input[type="number"].formkit-input {
+input[type="number"].formkit-input,
+input[type="datetime-local"].formkit-input,
+textarea,
+select.formkit-input  {
     background-color: var(--white-400);
     border-radius: var(--base-radius);
     border: 0;
     width: 100%;
     padding: 1rem;
+    resize: none;
 }
 
 .formkit-messages {
@@ -49,7 +53,10 @@ input[type="number"].formkit-input {
 .formkit-outer:has(li[data-message-type="validation"]) input[type="text"],
 .formkit-outer:has(li[data-message-type="validation"]) input[type="password"],
 .formkit-outer:has(li[data-message-type="validation"]) input[type="email"],
-.formkit-outer:has(li[data-message-type="validation"]) input[type="number"] {
+.formkit-outer:has(li[data-message-type="validation"]) input[type="number"],
+.formkit-outer:has(li[data-message-type="validation"]) input[type="datetime-local"],
+.formkit-outer:has(li[data-message-type="validation"]) textarea,
+.formkit-outer:has(li[data-message-type="validation"]) select {
     box-shadow: 0 0 0 3px var(--asset-400);
 }
 
@@ -65,4 +72,23 @@ button.formkit-input[type="submit"]{
     &:hover {
         background: var(--asset-400-hover)
     }
+}
+
+.formkit-submit-button {
+    margin-top: 20px;
+}
+
+.formkit-select-icon {
+    display: none;
+}
+
+option:checked {
+    background-color: var(--primary-400);
+    color: var(--white-400);
+}
+
+.formkit-help {
+    font-size: small;
+    color: var(--asset-400);
+    text-align: center;
 }

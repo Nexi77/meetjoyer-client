@@ -13,7 +13,8 @@
 --white-400-hover: #e2dbdb;
 
 // opacity colors
---half-white-400: #FFFFFF80;
+--half-white-400: rgb(255 255 255 / 50%);
+
 
 // typography
 --font-size-sm: clamp(0.75rem, 0.6842rem + 0.3509vw, 1rem);
@@ -111,3 +112,33 @@ button {
     background-color: #f1f1f1;  /* Background color of the scrollbar track */
     border-radius: 10px;        /* Rounded corners for the scrollbar track */
   }
+
+
+.asset-button {
+    border: 0;
+    color: var(--white-400);
+    background-color: var(--asset-400);
+    border-radius: var(--base-radius);
+    padding: 1rem;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: var(--asset-400-hover);
+    }
+}
+
+.site-header {
+    margin-bottom: 20px;
+}
+
+.site-form {
+    max-width: 800px;
+}
+
+.empty-list {
+    background-color: var(--primary-400);
+    padding: 20px;
+    text-align: center;
+}

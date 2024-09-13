@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { navigateTo } from 'nuxt/app';
-import type { FetchErrorWithMessage } from '@/types/api';
 
-const { $api, $toast } = useNuxtApp();
+const { $api } = useNuxtApp();
 const authStore = useAuthStore();
 
 async function logout()
@@ -17,14 +16,20 @@ async function logout()
         authCookie.value = null;
 
         localStorage.setItem('refreshToken', '');
+        authStore.user = null;
         navigateTo('/login');
     }
     catch (error)
     {
-        const { message } = useCustomError(error as FetchErrorWithMessage);
+        authStore.token = '';
 
-        if (message)
-            $toast.error(message);
+        const authCookie = useCookie('token');
+
+        authCookie.value = null;
+
+        localStorage.setItem('refreshToken', '');
+        authStore.user = null;
+        navigateTo('/login');
     }
 }
 </script>

@@ -20,5 +20,5 @@ export const useCustomError = (error: FetchErrorWithMessage) =>
         return { message: '', formErrors: error.data.message, formFormattedMessages: messages };
     }
 
-    return { message: errorMessage, formErrors: [], formFormattedMessages: {} };
+    return { message: errorMessage, formErrors: [], formFormattedMessages: {} as Record<string, string> };
 };

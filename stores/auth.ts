@@ -16,7 +16,13 @@ export const useAuthStore = defineStore('authStore', {
     state: (): AuthState => ({
         token: '',
         user: null
-    })
+    }),
+    getters: {
+        userRoles(state)
+        {
+            return state.user?.roles;
+        }
+    }
 });
 
 if (import.meta.hot)

@@ -37,9 +37,15 @@ export interface LectureModel {
     participants: UserData[];
 }
 
+export interface EventGeolocation {
+    lat: number;
+    lng: number;
+}
+
 export interface EventModel {
     id: number;
     name: string;
+    geolocation: EventGeolocation;
     location: string;
     startDate: string;
     endDate: string;

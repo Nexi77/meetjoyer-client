@@ -24,7 +24,7 @@ async function fetchEvents(filters?: Record<string, unknown>)
     {
         loading.value = true;
 
-        const { data } = await useAsyncData(() => $api.get<PaginatedResource<EventModel>>('events', { type: props.type, page: pager.value?.page, limit: pager.value?.limit, ...filters }));
+        const { data } = await useAsyncData(`events-${props.type}`, () => $api.get<PaginatedResource<EventModel>>('events', { type: props.type, page: pager.value?.page, limit: pager.value?.limit, ...filters }));
 
         if (!data.value) return;
 
@@ -65,6 +65,9 @@ fetchEvents();
         </Filters>
 
         <UiLoader v-if="loading" />
+        <div v-else-if="events.length === 0" class="empty-list">
+            No record was found
+        </div>
         <div v-else>
             <div class="events-list">
                 <EventsCard v-for="event in events" :key="event.id" :event="event" />

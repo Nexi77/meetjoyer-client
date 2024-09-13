@@ -58,7 +58,7 @@ function isPartOfRoute(routePath: string)
     min-height: 100vh;
     min-width: 300px;
     position: absolute;
-    z-index: 100;
+    z-index: 1001;
     transform: translateX(-300px);
     transition: transform 0.3s ease-in-out;
 
