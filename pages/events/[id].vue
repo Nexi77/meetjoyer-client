@@ -2,6 +2,8 @@
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import type { EventModel, FetchErrorWithMessage } from '~/types/api';
+import type { NominatimResponse } from '~/types/global';
+import ImagePlaceholder from '@images/image_placeholder.png';
 dayjs.extend(LocalizedFormat);
 
 const route = useRoute();
@@ -10,6 +12,7 @@ const loading = ref(false);
 
 const { $api, $toast } = useNuxtApp();
 const eventData = ref<EventModel | null>(null);
+const eventLocationName = ref('');
 
 async function fetchEventData()
 {
@@ -34,7 +37,26 @@ async function fetchEventData()
     }
 }
 
+async function fetchOSMObject(latAndLng: [number, number])
+{
+    try
+    {
+        const result = await $fetch<NominatimResponse>(`https://nominatim.openstreetmap.org/reverse?lat=${latAndLng[0]}&lon=${latAndLng[1]}&format=json`);
+
+        eventLocationName.value = result.display_name;
+    }
+    catch (error)
+    {
+        eventLocationName.value = `Unknown location, coordinates: ${latAndLng[0]}, ${latAndLng[1]}`;
+    }
+}
+
 await fetchEventData();
+
+if (eventData.value)
+{
+    fetchOSMObject([eventData.value.geolocation.lat, eventData.value.geolocation.lng]);
+}
 </script>
 
 <template>
@@ -53,8 +75,8 @@ await fetchEventData();
                 </UiUserAvatar>
             </div>
             <div class="left-column event-data-column">
-                <div v-if="eventData.image" class="image-wrapper">
-                    <img :src="eventData.image" alt="event promoting photo">
+                <div class="image-wrapper">
+                    <img :src="eventData.image || ImagePlaceholder" alt="event promoting photo">
                 </div>
                 <h1>{{ eventData.name }}</h1>
                 <p class="event-desc">
@@ -86,9 +108,9 @@ await fetchEventData();
                     />
 
                     <!-- Add a marker at Lenartowicza Street -->
-                    <LMarker :lat-lng="[50.0369, 21.9993]">
+                    <LMarker v-if="eventData" :lat-lng="[eventData.geolocation.lat, eventData.geolocation.lng]">
                         <LPopup>
-                            Lenartowicza Street, Rzeszów
+                            {{ eventLocationName }}
                         </LPopup>
                     </LMarker>
                 </LMap>
@@ -130,6 +152,7 @@ await fetchEventData();
 .details-info {
     display: grid;
     row-gap: 20px;
+    max-width: 1400px;
 
     @media screen and (width >= 968px){
         grid-template-columns: 1fr 1fr;
@@ -169,6 +192,7 @@ await fetchEventData();
     img {
         max-height: 100%;
         width: 100%;
+        height: 100%;
         object-fit: cover;
     }
 }

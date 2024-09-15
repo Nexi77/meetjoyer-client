@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { NominatimResponse } from '~/types/global';
+
 interface Emits {
     (e: 'locationSet', value: [number, number]): void
 }
@@ -7,12 +9,6 @@ const emits = defineEmits<Emits>();
 const center = ref<[number, number]>([50.0369, 21.9993]);
 const selectedLocation = ref<[number, number] | null>(null);
 const selectedLocationName = ref('');
-
-interface NomatimResponse {
-    display_name: string;
-    lat: string;
-    lon: string;
-}
 
 async function handleMapClick(event: any)
 {
@@ -29,7 +25,7 @@ async function fetchOSMObject(latAndLng: [number, number])
 {
     try
     {
-        const result = await $fetch<NomatimResponse>(`https://nominatim.openstreetmap.org/reverse?lat=${latAndLng[0]}&lon=${latAndLng[1]}&format=json`);
+        const result = await $fetch<NominatimResponse>(`https://nominatim.openstreetmap.org/reverse?lat=${latAndLng[0]}&lon=${latAndLng[1]}&format=json`);
 
         selectedLocation.value = [Number(result.lat), Number(result.lon)];
         selectedLocationName.value = result.display_name;

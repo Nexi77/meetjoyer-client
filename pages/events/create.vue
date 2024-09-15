@@ -57,7 +57,9 @@ async function onSubmit(data: FormValues, node: FormKitNode)
 
     const image = dataToCreate.image as null | { file: File, name: string }[];
 
-    if (image && image[0].file)
+    delete dataToCreate.image;
+
+    if (image && image[0]?.file)
     {
         const url = await uploadEventImage(image[0].file);
 
@@ -102,16 +104,16 @@ async function onSubmit(data: FormValues, node: FormKitNode)
         </h1>
         <div class="site-form">
             <FormKit type="form" class="site-form" :actions="false" @submit="onSubmit">
-                <FormKit type="text" name="name" label="Name" validation="required" />
-                <FormKit type="textarea" name="description" label="Description" validation="required" />
+                <FormKit type="text" name="name" label="Name" validation="required" required />
+                <FormKit type="textarea" name="description" label="Description" validation="required" required />
                 <FormFileUpload label="Event image" button-text="Select Event Image" />
-                <label class="formkit-label" for="map">Geolocation</label>
+                <label class="formkit-label" for="map">Geolocation<span class="required-star">*</span></label>
                 <EventsLocationPicker @location-set="geolocation = $event" />
                 <ul v-if="geolocationError" class="formkit-messages">
                     <li>{{ geolocationError }}</li>
                 </ul>
-                <FormKit type="text" name="location" label="City" validation="required" />
-                <FormKit type="datetime-local" name="startDate" label="Event start date" validation="required" />
+                <FormKit type="text" name="location" label="City" validation="required" required />
+                <FormKit type="datetime-local" name="startDate" label="Event start date" validation="required" required />
                 <FormKit
                     type="datetime-local"
                     name="endDate"
@@ -121,8 +123,16 @@ async function onSubmit(data: FormValues, node: FormKitNode)
                     :validation-messages="{
                         endDateGreaterThanStart: 'Date of event end cannot be earlier than event starting'
                     }"
+                    required
                 />
-                <FormKit type="select" label="Type of event" name="eventType" :options="eventTypesArray" validation="required" />
+                <FormKit
+                    type="select"
+                    label="Type of event"
+                    name="eventType"
+                    :options="eventTypesArray"
+                    validation="required"
+                    required
+                />
                 <FormKit
                     v-if="lectures"
                     type="select"
@@ -131,6 +141,8 @@ async function onSubmit(data: FormValues, node: FormKitNode)
                     name="lectureIds"
                     :options="lecturesOptions"
                     help="Select all that apply by holding command (macOS) or control (PC)."
+                    validation="required"
+                    required
                 />
                 <UiAction :loading="loading" class="formkit-submit-button">
                     <button type="submit">

@@ -142,3 +142,16 @@ button {
     padding: 20px;
     text-align: center;
 }
+
+.formkit-wrapper:has(input[required], textarea[required], select[required]) {
+    label {
+        &::after {
+            content: '*';
+            color: var(--asset-300);
+        }
+    }
+}
+
+.required-star {
+    color: red;
+}

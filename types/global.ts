@@ -30,3 +30,9 @@ export const EVENT_TYPE = {
 } as const;
 
 export type EventType = typeof EVENT_TYPE[keyof typeof EVENT_TYPE];
+
+export interface NominatimResponse {
+    display_name: string;
+    lat: string;
+    lon: string;
+}
