@@ -10,7 +10,7 @@ export default defineNuxtConfig({
         // Experimental support for auto loading (see note):
         autoImport: true
     },
-    css: ['@/assets/styles/global.scss', '@/assets/styles/reset.scss', '@/assets/fonts/fonts.css', '@/assets/styles/formkit.scss', 'vue-toastification/dist/index.css'],
+    css: ['@/assets/styles/global.scss', '@/assets/styles/reset.scss', '@/assets/fonts/fonts.css', 'vue-toastification/dist/index.css', '@/assets/styles/formkit.scss'],
     runtimeConfig: {
         public: {
             apiUrl: 'localhost:3333'

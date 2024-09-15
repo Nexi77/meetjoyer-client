@@ -77,6 +77,7 @@ p {
 
 .lecture-details-link{
     align-self: flex-end;
+    margin-top: auto;
     padding: 10px;
     background-color: var(--asset-400);
     color: var(--white-400);

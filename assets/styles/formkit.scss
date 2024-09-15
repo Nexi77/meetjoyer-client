@@ -20,6 +20,7 @@ input[type="password"].formkit-input,
 input[type="email"].formkit-input,
 input[type="number"].formkit-input,
 input[type="datetime-local"].formkit-input,
+input[type="file"].formkit-input,
 textarea,
 select.formkit-input  {
     background-color: var(--white-400);
@@ -60,6 +61,24 @@ select.formkit-input  {
     box-shadow: 0 0 0 3px var(--asset-400);
 }
 
+
+.form-upload {
+    background-color: var(--asset-400);
+    padding: 1rem;
+    border-radius: var(--base-radius);
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    input {
+        display: none;
+    }
+
+    &:hover {
+        background-color: var(--asset-400-hover);
+    }
+}
+
 button.formkit-input[type="submit"]{
     width: 100%;
     padding: 0.8rem;
@@ -78,7 +97,7 @@ button.formkit-input[type="submit"]{
     margin-top: 20px;
 }
 
-.formkit-select-icon {
+.formkit-select-icon, .formkit-no-files {
     display: none;
 }
 
@@ -91,4 +110,8 @@ option:checked {
     font-size: small;
     color: var(--asset-400);
     text-align: center;
+}
+
+.formkit-file-item-icon, .formkit-file-list {
+    display: none;
 }

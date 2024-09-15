@@ -4,13 +4,14 @@ import type { EventModel, FetchErrorWithMessage, LectureModel } from '~/types/ap
 import type { EventType } from '~/types/global';
 import { eventTypesArray } from '~/utils/event';
 
-interface FormData {
+interface FormValues {
     name: string;
     description: string;
     city: string;
     startDate: string;
     endDate: string;
     eventType: EventType
+    image?: { file: File, name: string }[],
     lectureIds?: number[];
 }
 
@@ -20,13 +21,48 @@ const { data: lectures } = useAsyncData(async () => await $api.get<LectureModel[
 const geolocationError = ref('');
 const lecturesOptions = computed(() => lectures.value?.map(lecture => ({ label: lecture.title, value: lecture.id })) ?? []);
 const geolocation = ref<[number, number] | null>(null);
+const loading = ref(false);
 
-async function onSubmit(data: FormData, node: FormKitNode)
+async function uploadEventImage(file: File)
 {
-    const dataToCreate: FormData & { geolocation?: [number, number] } = { ...data };
+    const formData = new FormData();
+
+    formData.append('file', file);
+
+    try
+    {
+        const imageUrl = await $api.postFormData<string>('upload/image', formData);
+
+        return imageUrl;
+    }
+
+    catch (err)
+    {
+        const { $toast } = useNuxtApp();
+        const { message } = useCustomError(err as FetchErrorWithMessage);
+
+        if (message)
+            $toast.error(message);
+    }
+}
+
+async function onSubmit(data: FormValues, node: FormKitNode)
+{
+    loading.value = true;
+
+    const dataToCreate: Record<string, any> = { ...data };
 
     dataToCreate.startDate = dayjs(dataToCreate.startDate).toISOString();
     dataToCreate.endDate = dayjs(dataToCreate.endDate).toISOString();
+
+    const image = dataToCreate.image as null | { file: File, name: string }[];
+
+    if (image && image[0].file)
+    {
+        const url = await uploadEventImage(image[0].file);
+
+        dataToCreate.image = url;
+    }
 
     if (geolocation.value)
         dataToCreate.geolocation = geolocation.value;
@@ -36,9 +72,10 @@ async function onSubmit(data: FormData, node: FormKitNode)
 
     try
     {
-        await $api.post<EventModel>('events', dataToCreate);
+        const result = await $api.post<EventModel>('events', dataToCreate);
+
         $toast.success('Event was created');
-        navigateTo('/events');
+        navigateTo(`/events/${result.id}`);
     }
     catch (error)
     {
@@ -50,6 +87,10 @@ async function onSubmit(data: FormData, node: FormKitNode)
             $toast.error(message);
 
         node.setErrors([], formFormattedMessages);
+    }
+    finally
+    {
+        loading.value = false;
     }
 }
 </script>
@@ -63,14 +104,24 @@ async function onSubmit(data: FormData, node: FormKitNode)
             <FormKit type="form" class="site-form" :actions="false" @submit="onSubmit">
                 <FormKit type="text" name="name" label="Name" validation="required" />
                 <FormKit type="textarea" name="description" label="Description" validation="required" />
+                <FormFileUpload label="Event image" button-text="Select Event Image" />
                 <label class="formkit-label" for="map">Geolocation</label>
                 <EventsLocationPicker @location-set="geolocation = $event" />
                 <ul v-if="geolocationError" class="formkit-messages">
                     <li>{{ geolocationError }}</li>
                 </ul>
                 <FormKit type="text" name="location" label="City" validation="required" />
-                <FormKit type="datetime-local" name="startDate" label="When it begins?" validation="required" />
-                <FormKit type="datetime-local" name="endDate" label="When it ends?" validation="required" />
+                <FormKit type="datetime-local" name="startDate" label="Event start date" validation="required" />
+                <FormKit
+                    type="datetime-local"
+                    name="endDate"
+                    label="Event end date"
+                    validation="required|endDateGreaterThanStart"
+                    :validation-rules="{ endDateGreaterThanStart }"
+                    :validation-messages="{
+                        endDateGreaterThanStart: 'Date of event end cannot be earlier than event starting'
+                    }"
+                />
                 <FormKit type="select" label="Type of event" name="eventType" :options="eventTypesArray" validation="required" />
                 <FormKit
                     v-if="lectures"
@@ -81,9 +132,11 @@ async function onSubmit(data: FormData, node: FormKitNode)
                     :options="lecturesOptions"
                     help="Select all that apply by holding command (macOS) or control (PC)."
                 />
-                <button type="submit" class="asset-button formkit-submit-button">
-                    Submit
-                </button>
+                <UiAction :loading="loading" class="formkit-submit-button">
+                    <button type="submit">
+                        Submit
+                    </button>
+                </UiAction>
             </FormKit>
         </div>
     </section>

@@ -74,6 +74,11 @@ class ApiHelper implements ApiModel
         return await this.fetch<T>(url, { method: 'POST', body });
     }
 
+    public async postFormData<T>(url: string, body: Record<string, any>): Promise<T>
+    {
+        return await this.fetch<T>(url, { method: 'POST', body, headers: { 'Content-Type': 'multipart/form-data' } });
+    }
+
     public async put<T>(url: string, body: Record<string, any> = {}): Promise<T>
     {
         return await this.fetch<T>(url, { method: 'PUT', body });
