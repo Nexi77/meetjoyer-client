@@ -21,6 +21,10 @@ export const useAuthStore = defineStore('authStore', {
         userRoles(state)
         {
             return state.user?.roles;
+        },
+        userImage(state)
+        {
+            return state.user?.image;
         }
     }
 });

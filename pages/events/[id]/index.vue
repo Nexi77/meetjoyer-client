@@ -13,6 +13,7 @@ const loading = ref(false);
 const { $api, $toast } = useNuxtApp();
 const eventData = ref<EventModel | null>(null);
 const eventLocationName = ref('');
+const map = ref<any>(null);
 
 async function fetchEventData()
 {
@@ -57,6 +58,13 @@ if (eventData.value)
 {
     fetchOSMObject([eventData.value.geolocation.lat, eventData.value.geolocation.lng]);
 }
+
+function setMapCenter()
+{
+    const mapLeaflet = map.value.leafletObject ?? null;
+
+    mapLeaflet.setView([eventData.value?.geolocation.lat, eventData.value?.geolocation.lng], 16);
+}
 </script>
 
 <template>
@@ -95,10 +103,12 @@ if (eventData.value)
             </div>
             <div class="right-column event-data-column">
                 <LMap
+                    ref="map"
                     style="height: 350px; border-radius: 10px;"
                     :zoom="16"
                     :center="[50.0369, 21.9993]"
                     :use-global-leaflet="false"
+                    @ready="setMapCenter"
                 >
                     <LTileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

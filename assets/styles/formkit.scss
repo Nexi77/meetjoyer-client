@@ -91,6 +91,15 @@ button.formkit-input[type="submit"]{
     &:hover {
         background: var(--asset-400-hover)
     }
+
+    &:disabled {
+        background-color: var(--disabled-bg);
+        cursor: not-allowed;
+
+        &:hover {
+            background-color: var(--disabled-bg-hover);
+        }
+    }
 }
 
 .formkit-submit-button {
@@ -114,4 +123,8 @@ option:checked {
 
 .formkit-file-item-icon, .formkit-file-list {
     display: none;
+}
+
+.formkit-form[data-loading="true"]{
+    pointer-events: none;
 }

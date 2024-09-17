@@ -4,9 +4,15 @@ import EmptyImage from '@images/image_placeholder.png';
 interface Props {
     label: string;
     buttonText: string;
+    imageUrl?: string | null;
 }
 
-defineProps<Props>();
+interface Emits {
+    (e: 'image-removed'): void;
+}
+
+const props = defineProps<Props>();
+const emits = defineEmits<Emits>();
 
 const randomId = crypto.randomUUID();
 const imagePreview = ref<string | null>(null);
@@ -42,7 +48,11 @@ function removeImage()
     selectedFile.value = null;
     imagePreview.value = null;
     reset(randomId, null);
+    emits('image-removed');
 }
+
+if (props.imageUrl)
+    imagePreview.value = props.imageUrl;
 </script>
 
 <template>
@@ -54,10 +64,10 @@ function removeImage()
             <p v-if="!imagePreview" class="preview-text">
                 Selected image can be seen here as a preview
             </p>
-            <button v-if="selectedFile" type="button" title="Remove image" @click="removeImage">
-                &#10005;
-            </button>
             <div class="image-wrapper">
+                <button v-if="selectedFile || imagePreview" type="button" title="Remove image" @click="removeImage">
+                    &#10005;
+                </button>
                 <img :src="imagePreview || EmptyImage" alt="">
             </div>
         </div>
@@ -87,7 +97,6 @@ function removeImage()
     margin-bottom: 10px;
     border-radius: var(--base-radius);
     overflow: hidden;
-    position: relative;
 
     .preview-text {
         position: absolute;
@@ -124,6 +133,7 @@ function removeImage()
 
 .image-wrapper {
     height: 350px;
+    position: relative;
     border-radius: var(--base-radius);
     overflow: hidden;
 

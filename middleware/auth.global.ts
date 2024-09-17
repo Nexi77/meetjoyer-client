@@ -8,7 +8,7 @@ interface TokenData {
     roles: Role[];
 }
 
-export default defineNuxtRouteMiddleware((to) =>
+export default defineNuxtRouteMiddleware(async (to) =>
 {
     const { $api } = useNuxtApp();
     const { ssrContext } = useNuxtApp();
@@ -32,9 +32,20 @@ export default defineNuxtRouteMiddleware((to) =>
     if (!authStore.user && authStore.token)
     {
         const tokenData = jwtDecode<TokenData>(authStore.token);
-        const userModel: UserData = { id: tokenData.sub, email: tokenData.email, roles: tokenData.roles };
 
-        authStore.user = userModel;
+        try
+        {
+            const userResponse = await $api.get<UserData>(`users/${tokenData.sub}`);
+            const userModel: UserData = { id: userResponse.id, email: userResponse.email, roles: userResponse.roles, image: userResponse.image };
+
+            authStore.user = userModel;
+        }
+        catch (err)
+        {
+            authStore.token = '';
+            authStore.user = null;
+            navigateTo('/');
+        }
     }
 
     const isUnauthorizedPage = ['login', 'register'].includes((to.name ?? '') as string);

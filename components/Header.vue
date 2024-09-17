@@ -1,5 +1,8 @@
 <template>
     <header>
+        <NuxtLink to="/profile">
+            <UiUserAvatar :image-url="useAuthStore().userImage" />
+        </NuxtLink>
         <button class="menu-toggle" title="Menu toggle" @click="$emit('menu-change')">
             <span />
             <span />
@@ -13,7 +16,9 @@ header {
     height: 66px;
     padding-block: 10px;
     padding-inline: 20px;
+    gap: 10px;
     display: flex;
+    justify-content: flex-end;
     border-bottom: 1px solid var(--half-white-400);
     align-items: center;
 }
@@ -26,7 +31,6 @@ header {
     position: relative;
     z-index: 1002;
     flex-direction: column;
-    margin-left: auto;
     gap: 5px;
 
     span {

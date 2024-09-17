@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
+
 import type { EventModel, FetchErrorWithMessage, LectureModel } from '~/types/api';
 import type { EventType } from '~/types/global';
 import { eventTypesArray } from '~/utils/event';
-import { uploadImage } from '~/utils/file';
 
 interface FormValues {
     name: string;
     description: string;
-    city: string;
+    location: string;
     startDate: string;
     endDate: string;
     eventType: EventType
@@ -17,12 +17,93 @@ interface FormValues {
 }
 
 const { $api, $toast } = useNuxtApp();
+const route = useRoute();
+const eventId = route.params.id as string;
 
-const { data: lectures } = useAsyncData(async () => await $api.get<LectureModel[]>('lectures'));
 const geolocationError = ref('');
-const lecturesOptions = computed(() => lectures.value?.map(lecture => ({ label: lecture.title, value: lecture.id })) ?? []);
+const lecturesData = ref<LectureModel[]>([]);
+const lecturesOptions = computed(() => lecturesData.value?.map(lecture => ({ label: lecture.title, value: lecture.id })) ?? []);
 const geolocation = ref<[number, number] | null>(null);
 const loading = ref(false);
+const wasImageRemoved = ref(false);
+const updateForm = ref<FormKitNode | null>(null);
+const eventFetchedData = ref<EventModel | null>(null);
+const formValues = ref<Record<string, any>>({
+    location: '',
+    description: '',
+    eventType: '',
+    endDate: '',
+    name: '',
+    startDate: '',
+    lectureIds: []
+});
+
+async function fetchLectures()
+{
+    return await $api.get<LectureModel[]>('lectures');
+}
+
+async function fetchEventData(eventId: string)
+{
+    return await $api.get<EventModel>(`events/${eventId}`);
+}
+
+async function fetchDataInParallel()
+{
+    try
+    {
+        loading.value = true;
+
+        const [lectures, eventData] = await Promise.all([
+            fetchLectures(),
+            fetchEventData(eventId)
+        ]);
+
+        eventFetchedData.value = eventData;
+        geolocation.value = [eventData.geolocation.lat, eventData.geolocation.lng];
+        lecturesData.value = lectures;
+        formValues.value = {
+            location: eventData.location,
+            description: eventData.description,
+            startDate: dayjs(eventData.startDate).format('YYYY-MM-DDTHH:mm'),
+            endDate: dayjs(eventData.endDate).format('YYYY-MM-DDTHH:mm'),
+            name: eventData.name,
+            eventType: eventData.eventType,
+            lectureIds: eventData.lectures.map(lecture => lecture.id)
+        };
+    }
+    catch (err)
+    {
+        throw createError({ message: `Could not fetch data of event with id: ${eventId}`, fatal: true });
+    }
+    finally
+    {
+        loading.value = false;
+    }
+}
+
+async function uploadEventImage(file: File)
+{
+    const formData = new FormData();
+
+    formData.append('file', file);
+
+    try
+    {
+        const imageUrl = await $api.postFormData<string>('upload/image', formData);
+
+        return imageUrl;
+    }
+
+    catch (err)
+    {
+        const { $toast } = useNuxtApp();
+        const { message } = useCustomError(err as FetchErrorWithMessage);
+
+        if (message)
+            $toast.error(message);
+    }
+}
 
 async function onSubmit(data: FormValues, node: FormKitNode)
 {
@@ -37,9 +118,14 @@ async function onSubmit(data: FormValues, node: FormKitNode)
 
     delete dataToCreate.image;
 
-    if (image && image[0]?.file)
+    if (wasImageRemoved.value && !image?.[0]?.file)
     {
-        const url = await uploadImage(image[0].file);
+        dataToCreate.image = null;
+    }
+
+    if (image?.[0]?.file)
+    {
+        const url = await uploadEventImage(image[0].file);
 
         dataToCreate.image = url;
     }
@@ -52,9 +138,9 @@ async function onSubmit(data: FormValues, node: FormKitNode)
 
     try
     {
-        const result = await $api.post<EventModel>('events', dataToCreate);
+        const result = await $api.put<EventModel>(`events/${eventId}`, dataToCreate);
 
-        $toast.success('Event was created');
+        $toast.success('Event was updated');
         navigateTo(`/events/${result.id}`);
     }
     catch (error)
@@ -73,20 +159,29 @@ async function onSubmit(data: FormValues, node: FormKitNode)
         loading.value = false;
     }
 }
+
+await fetchDataInParallel();
 </script>
 
 <template>
     <section>
         <h1 class="site-header">
-            Create new event that you want to organise
+            Update existing event
         </h1>
         <div class="site-form">
-            <FormKit type="form" class="site-form" :actions="false" @submit="onSubmit">
+            <FormKit
+                ref="updateForm"
+                type="form"
+                class="site-form"
+                :value="formValues"
+                :actions="false"
+                @submit="onSubmit"
+            >
                 <FormKit type="text" name="name" label="Name" validation="required" required />
                 <FormKit type="textarea" name="description" label="Description" validation="required" required />
-                <FormFileUpload label="Event image" button-text="Select Event Image" />
+                <FormFileUpload label="Event image" :image-url="eventFetchedData?.image" button-text="Select Event Image" @image-removed="wasImageRemoved = true" />
                 <label class="formkit-label" for="map">Geolocation<span class="required-star">*</span></label>
-                <EventsLocationPicker @location-set="geolocation = $event" />
+                <EventsLocationPicker :geolocation="eventFetchedData?.geolocation" @location-set="geolocation = $event" />
                 <ul v-if="geolocationError" class="formkit-messages">
                     <li>{{ geolocationError }}</li>
                 </ul>
@@ -112,7 +207,7 @@ async function onSubmit(data: FormValues, node: FormKitNode)
                     required
                 />
                 <FormKit
-                    v-if="lectures"
+                    v-if="lecturesData"
                     type="select"
                     label="Lectures in the event"
                     multiple

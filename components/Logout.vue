@@ -43,7 +43,6 @@ async function logout()
 
 <style lang="scss" scoped>
     .logout {
-        margin-top: auto;
         margin-bottom: 10px;
         display: flex;
         align-items: center;
