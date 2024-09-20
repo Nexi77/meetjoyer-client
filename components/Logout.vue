@@ -48,6 +48,7 @@ async function logout()
         align-items: center;
         justify-content: center;
         gap: 5px;
+        margin-top: 10px;
         align-self: center;
         padding: 12px 10px;
         min-width: 200px;

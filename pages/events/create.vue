@@ -2,7 +2,7 @@
 import dayjs from 'dayjs';
 import type { EventModel, FetchErrorWithMessage, LectureModel } from '~/types/api';
 import type { EventType } from '~/types/global';
-import { eventTypesArray } from '~/utils/event';
+import { eventTypesArray } from '~/utils/filters';
 import { uploadImage } from '~/utils/file';
 
 interface FormValues {

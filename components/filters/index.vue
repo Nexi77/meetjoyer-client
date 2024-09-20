@@ -38,10 +38,10 @@ function resetFilters()
                         <slot />
                     </div>
                     <div class="actions">
-                        <button type="button" class="reset" @click="resetFilters">
+                        <button type="button" class="reset" @click.prevent="resetFilters">
                             Reset
                         </button>
-                        <button type="submit" @click="resetFilters">
+                        <button type="submit">
                             Search
                         </button>
                     </div>
@@ -140,7 +140,7 @@ function resetFilters()
     font-size: 1.1rem;
 }
 
-.collapse .content input {
+.collapse .content input, .collapse .content select{
     border: 2px solid var(--primary-400);
 }
 </style>
