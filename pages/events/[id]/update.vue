@@ -102,6 +102,8 @@ async function uploadEventImage(file: File)
 
         if (message)
             $toast.error(message);
+
+        throw new Error('We couldnt save user picture, try again!');
     }
 }
 

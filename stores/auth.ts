@@ -6,6 +6,7 @@ export interface UserData {
     email: string;
     roles: Role[];
     image?: string;
+    createdAt?: string;
 }
 export interface AuthState {
     token: string;

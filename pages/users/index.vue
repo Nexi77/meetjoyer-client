@@ -10,6 +10,15 @@ const page = Number(route.query.page) || 1;
 const pager = computed(() => storeApp.pagers['users-list']);
 const { $api, $toast } = useNuxtApp();
 
+function onDeleteClick(id: number)
+{
+    const event = new CustomEvent('confirm', {
+        detail: { id }
+    });
+
+    window.dispatchEvent(event);
+}
+
 async function fetchUsers(filters?: Record<string, unknown>)
 {
     try
@@ -36,6 +45,24 @@ async function fetchUsers(filters?: Record<string, unknown>)
     }
 }
 
+async function deleteUser(id: number)
+{
+    try
+    {
+        await $api.delete<UserData>(`users/${id}`);
+        await fetchUsers();
+
+        $toast.success('User was successfully deleted');
+    }
+    catch (error)
+    {
+        const { message } = useCustomError(error as FetchErrorWithMessage);
+
+        if (message)
+            $toast.error(message);
+    }
+}
+
 createPager('events-list', page);
 
 fetchUsers();
@@ -43,6 +70,11 @@ fetchUsers();
 
 <template>
     <div>
+        <UiConfirm
+            title="Delete user"
+            message="Are you sure you want to delete this user?"
+            @confirm="deleteUser"
+        />
         <Filters @search="fetchUsers">
             <FormKit
                 type="text"
@@ -65,7 +97,22 @@ fetchUsers();
         </div>
         <div v-else>
             <div class="users-list">
-                <UsersCard v-for="user in users" :key="user.id" :user="user" />
+                <UsersCard v-for="user in users" :key="user.id" :user="user">
+                    <template v-if="useAuthStore().user?.id !== user.id" #actions>
+                        <button type="button" class="asset-button label-with-icon" title="delete user" @click.prevent="() => onDeleteClick(user.id)">
+                            <svg
+                                id="Capa_1"
+                                fill="var(--white-400)"
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                viewBox="0 0 490.646 490.646"
+                                xml:space="preserve"
+                            ><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M399.179,67.285l-74.794,0.033L324.356,0L166.214,0.066l0.029,67.318l-74.802,0.033l0.025,62.914h307.739L399.179,67.285z M198.28,32.11l94.03-0.041l0.017,35.262l-94.03,0.041L198.28,32.11z" /> <path d="M91.465,490.646h307.739V146.359H91.465V490.646z M317.461,193.372h16.028v250.259h-16.028V193.372L317.461,193.372z M237.321,193.372h16.028v250.259h-16.028V193.372L237.321,193.372z M157.18,193.372h16.028v250.259H157.18V193.372z" /> </g> </g> </g></svg>
+                            Delete
+                        </button>
+                    </template>
+                </UsersCard>
             </div>
             <ListsPagination pager-indentifier="users-list" @change="fetchUsers" />
         </div>
