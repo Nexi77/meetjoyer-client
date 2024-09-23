@@ -40,7 +40,7 @@ const formValues = ref<Record<string, any>>({
 
 async function fetchLectures()
 {
-    return await $api.get<LectureModel[]>('lectures');
+    return await $api.get<LectureModel[]>('lectures/no-pagination');
 }
 
 async function fetchEventData(eventId: string)

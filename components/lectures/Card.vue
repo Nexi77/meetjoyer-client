@@ -50,9 +50,10 @@ defineProps<Props>();
 
 p {
     margin-bottom: 0;
+    font-weight: bold;
 
     span {
-        font-weight: bold;
+        font-weight: normal;
     }
 }
 
