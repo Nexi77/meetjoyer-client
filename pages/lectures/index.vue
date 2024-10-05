@@ -1,78 +1,27 @@
 <script setup lang="ts">
-import type { FetchErrorWithMessage, LectureModel } from '~/types/api';
-import type { PaginatedResource } from '~/types/pagination';
+import { ROLES } from '~/types/global';
 
-const loading = ref(false);
-const storeApp = useAppStore();
-const lecturesData = ref<LectureModel[]>([]);
 const route = useRoute();
-const page = Number(route.query.page) || 1;
-const { $api, $toast } = useNuxtApp();
-
-createPager('lectures', page);
-
-const pager = computed(() => storeApp.pagers.lectures);
-
-async function fetchLectures(filters?: Record<string, unknown>)
-{
-    try
-    {
-        loading.value = true;
-
-        const { data } = await useAsyncData(() => $api.get<PaginatedResource<LectureModel>>('lectures', { page: pager.value?.page, limit: 10, ...filters }));
-
-        if (!data.value)
-            return;
-
-        lecturesData.value = data.value?.data;
-        updatePager('lectures', data.value);
-    }
-    catch (error)
-    {
-        const { message } = useCustomError(error as FetchErrorWithMessage);
-
-        if (message) $toast.error(message);
-    }
-    finally
-    {
-        loading.value = false;
-    }
-}
-
-await fetchLectures();
+const { type } = route.query;
 </script>
 
 <template>
     <section>
-        <Filters @search="fetchLectures">
-            <FormKit
-                type="text"
-                name="title"
-                label="Title"
-                placeholder=""
-            />
-        </Filters>
-        <UiLoader v-if="loading" />
-        <div v-else-if="lecturesData.length === 0" class="empty-list">
-            No record was found
-        </div>
-        <div v-else>
-            <div class="lectures-list">
-                <LecturesCard v-for="lecture in lecturesData" :key="lecture.id" :lecture="lecture" class="lecture-list-card" />
-            </div>
-            <ListsPagination pager-indentifier="lectures" @change="fetchLectures" />
-        </div>
+        <UiPermission :accept="[ROLES.ADMIN, ROLES.ORGANISER]">
+            <UiActions>
+                <NuxtLink class="asset-button label-with-icon" to="/lectures/create">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0" /><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" /><g id="SVGRepo_iconCarrier"> <path d="M6 12H18M12 6V18" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /> </g></svg>
+                    Create lecture
+                </NuxtLink>
+            </UiActions>
+        </UiPermission>
+        <UiTabs :active-index="type === 'mine' ? 1 : 0">
+            <UiTab title="Lectures" :index="0">
+                <ListsLecturesList />
+            </UiTab>
+            <UiTab title="Chosen lectures" :index="1">
+                <ListsLecturesList type="mine" />
+            </UiTab>
+        </UiTabs>
     </section>
 </template>
-
-<style lang="scss" scoped>
-.lectures-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 15px;
-}
-
-.lecture-list-card {
-    max-width: unset;
-}
-</style>

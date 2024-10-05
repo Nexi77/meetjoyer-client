@@ -18,7 +18,7 @@ interface FormValues {
 
 const { $api, $toast } = useNuxtApp();
 
-const { data: lectures } = useAsyncData(async () => await $api.get<LectureModel[]>('lectures'));
+const { data: lectures } = useAsyncData(async () => await $api.get<LectureModel[]>('lectures/no-pagination'));
 const geolocationError = ref('');
 const lecturesOptions = computed(() => lectures.value?.map(lecture => ({ label: lecture.title, value: lecture.id })) ?? []);
 const geolocation = ref<[number, number] | null>(null);

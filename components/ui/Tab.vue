@@ -11,7 +11,7 @@ const selectedIndex = inject('selectedIndex');
 </script>
 
 <template>
-    <div v-show="index === selectedIndex" class="tab">
+    <div v-if="index === selectedIndex" class="tab">
         <slot />
     </div>
 </template>
