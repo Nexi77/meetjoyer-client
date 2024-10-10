@@ -36,3 +36,9 @@ export interface NominatimResponse {
     lat: string;
     lon: string;
 }
+
+export interface MessageContent {
+    user: UserData;
+    text: string;
+    timestamp: string;
+}

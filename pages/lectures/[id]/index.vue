@@ -9,6 +9,7 @@ const route = useRoute();
 const lectureId = route.params.id as string;
 const loading = ref(false);
 const lectureData = ref<LectureModel | null>(null);
+const authStore = useAuthStore();
 
 const { $api, $toast } = useNuxtApp();
 
@@ -38,14 +39,14 @@ await fetchLectureData();
 
 const currentTime = ref(dayjs());
 
-const isLectureLive = computed(() =>
+const canChatBeShown = computed(() =>
 {
     if (lectureData.value)
     {
         const startTime = dayjs(lectureData.value.startTime);
         const endTime = dayjs(lectureData.value.endTime);
 
-        return currentTime.value.isAfter(startTime) && currentTime.value.isBefore(endTime);
+        return currentTime.value.isAfter(startTime) && currentTime.value.isBefore(endTime) && lectureData.value.participants.some(participant => participant.id === authStore.user?.id);
     }
 
     return false;
@@ -53,34 +54,37 @@ const isLectureLive = computed(() =>
 </script>
 
 <template>
-    <section v-if="lectureData" class="lecture-details">
-        <div class="details-info">
-            <h1>{{ lectureData.title }}</h1>
+    <template v-if="lectureData">
+        <section class="lecture-details">
+            <div class="details-info">
+                <h1>{{ lectureData.title }}</h1>
 
-            <div class="info-block">
-                <p v-if="lectureData.description" class="description">
-                    {{ lectureData.description }}
-                </p>
-                <p><strong>Starts:</strong> {{ dayjs(lectureData.startTime).format('DD MMMM YYYY, HH:mm') }}</p>
-                <p><strong>Ends:</strong> {{ dayjs(lectureData.endTime).format('DD MMMM YYYY, HH:mm') }}</p>
+                <div class="info-block">
+                    <p v-if="lectureData.description" class="description">
+                        {{ lectureData.description }}
+                    </p>
+                    <p><strong>Starts:</strong> {{ dayjs(lectureData.startTime).format('DD MMMM YYYY, HH:mm') }}</p>
+                    <p><strong>Ends:</strong> {{ dayjs(lectureData.endTime).format('DD MMMM YYYY, HH:mm') }}</p>
 
-                <div class="speaker">
-                    <h3>Speaker:</h3>
-                    <UserAvatar :image-url="lectureData.speaker.image || ImagePlaceholder" alt="speaker-avatar" :size="100" />
-                    <p>{{ lectureData.speaker.email }}</p>
+                    <div class="speaker">
+                        <h3>Speaker:</h3>
+                        <UserAvatar :image-url="lectureData.speaker.image || ImagePlaceholder" alt="speaker-avatar" :size="100" />
+                        <p>{{ lectureData.speaker.email }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <section class="live-chat">
-        <h2>Lecture live chat</h2>
-        <div v-if="isLectureLive">
-            <!-- // chat available here -->
-        </div>
-        <div v-else>
-            <small>The live chat will be accessible when the lecture starts.</small>
-        </div>
-    </section>
+        </section>
+        <section class="live-chat">
+            <h2>Lecture live chat</h2>
+            <Chat :lecture-id="lectureData.id" />
+            <!-- <div v-if="canChatBeShown">
+                <Chat :lecture-id="lectureData.id" />
+            </div> -->
+            <!-- <div v-else>
+                <small>The live chat will be accessible when the lecture starts and if you're one of it's participants</small>
+            </div> -->
+        </section>
+    </template>
 </template>
 
 <style lang="scss" scoped>
@@ -131,6 +135,7 @@ const isLectureLive = computed(() =>
   background-color: var(--primary-100);
   padding: 20px;
   border-radius: var(--base-radius);
+  max-width: 800px;
 
   h2 {
     font-size: 1.5rem;
