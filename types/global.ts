@@ -42,3 +42,11 @@ export interface MessageContent {
     text: string;
     timestamp: string;
 }
+
+export interface FetchedMessage {
+    _id: string;
+    lectureId: string;
+    user: UserData;
+    text: string;
+    createdAt: string;
+}

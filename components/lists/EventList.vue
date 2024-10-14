@@ -44,11 +44,34 @@ async function fetchEvents(filters?: Record<string, unknown>)
     }
 }
 
-fetchEvents();
+await fetchEvents();
+
+async function deleteLecture(id: number)
+{
+    try
+    {
+        await $api.delete<UserData>(`events/${id}`);
+        await fetchEvents();
+        $toast.success('Evnet was successfully deleted');
+    }
+    catch (error)
+    {
+        const { message } = useCustomError(error as FetchErrorWithMessage);
+
+        if (message)
+            $toast.error(message);
+    }
+}
+
 </script>
 
 <template>
     <div>
+        <UiConfirm
+            title="Delete Event"
+            message="Are you sure you want to delete this event?"
+            @confirm="deleteLecture"
+        />
         <Filters @search="fetchEvents">
             <FormKit
                 type="text"

@@ -19,27 +19,11 @@ const handleSendMessage = () =>
         newMessage.value = '';
     }
 };
-
-const scrollToBottomOfChat = () =>
-{
-    nextTick(() =>
-    {
-        if (chat.value)
-        {
-            chat.value.scrollTo({
-                top: chat.value.scrollHeight,
-                behavior: 'smooth'
-            });
-        }
-    });
-};
-
-watch(() => messages.value.length, () => scrollToBottomOfChat());
 </script>
 
 <template>
     <div class="chat-container">
-        <div ref="chat" class="chat-messages" :class="{ 'messages-list': messages.length }">
+        <div id="chat-messages" ref="chat" class="chat-messages" :class="{ 'messages-list': messages.length }">
             <p v-if="!messages.length">
                 No message was sent yet
             </p>
@@ -49,7 +33,7 @@ watch(() => messages.value.length, () => scrollToBottomOfChat());
             </div>
         </div>
         <form class="chat-send-zone" @submit.prevent="handleSendMessage">
-            <div v-if="isTyping" class="typing-indicator">
+            <div v-if="isTyping && typingUserId !== authStore.user?.id" class="typing-indicator">
                 Someone is typing...
             </div>
             <input v-model="newMessage" type="text" placeholder="Type a message..." @input="emitTypingEvent">

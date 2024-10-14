@@ -6,7 +6,7 @@ export const passwordRule = (node: FormKitNode) =>
 export const endDateGreaterThanStart = (node: FormKitNode) =>
 {
     const endDate = node.value as string;
-    const startDate = node.at('startDate')?.value as string || node.at('startTime')?.value as string;
+    const startDate = node.at('startDate')?.value as string;
 
     if (startDate && endDate)
     {

@@ -69,7 +69,7 @@ await fetchLectures();
     <section>
         <UiConfirm
             title="Delete lecture"
-            message="Are you sure you want to delete this user?"
+            message="Are you sure you want to delete this lecture?"
             @confirm="deleteLecture"
         />
         <Filters v-if="!props.inHome" @search="fetchLectures">

@@ -119,8 +119,6 @@ async function onSubmit(data: FormValues, node: FormKitNode)
                     name="lectureIds"
                     :options="lecturesOptions"
                     help="Select all that apply by holding command (macOS) or control (PC)."
-                    validation="required"
-                    required
                 />
                 <UiAction :loading="loading" class="formkit-submit-button">
                     <button type="submit">

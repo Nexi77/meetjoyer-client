@@ -21,6 +21,7 @@ input[type="email"].formkit-input,
 input[type="number"].formkit-input,
 input[type="datetime-local"].formkit-input,
 input[type="file"].formkit-input,
+input[type="time"].formkit-input,
 textarea,
 select.formkit-input  {
     background-color: var(--white-400);
@@ -56,6 +57,7 @@ select.formkit-input  {
 .formkit-outer:has(li[data-message-type="validation"]) input[type="email"],
 .formkit-outer:has(li[data-message-type="validation"]) input[type="number"],
 .formkit-outer:has(li[data-message-type="validation"]) input[type="datetime-local"],
+.formkit-outer:has(li[data-message-type="validation"]) input[type="time"],
 .formkit-outer:has(li[data-message-type="validation"]) textarea,
 .formkit-outer:has(li[data-message-type="validation"]) select {
     box-shadow: 0 0 0 3px var(--asset-400);

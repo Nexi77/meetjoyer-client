@@ -30,8 +30,6 @@ export interface LectureModel {
     id: number;
     title: string;
     description?: string;
-    startTime: string;
-    endTime: string;
     speaker: UserData;
     eventId: number | null;
     participants: UserData[];

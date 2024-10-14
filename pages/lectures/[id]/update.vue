@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import dayjs from 'dayjs';
 import type { LectureModel, FetchErrorWithMessage, EventModel } from '~/types/api';
 
 interface FormValues {
     title: string;
     description?: string;
-    startTime: string;
-    endTime: string;
     speakerId: number;
     eventId?: number;
-    participants?: number[];
 }
 
 const { $api, $toast } = useNuxtApp();
@@ -23,11 +19,8 @@ const loading = ref(false);
 const formValues = ref<Record<string, any>>({
     title: '',
     description: '',
-    startTime: '',
-    endTime: '',
     speakerId: '',
-    eventId: null,
-    participants: []
+    eventId: null
 });
 
 const userOptions = computed(() => usersData.value?.map(user => ({ label: user.email, value: user.id })) ?? []);
@@ -66,8 +59,6 @@ async function fetchDataInParallel()
         formValues.value = {
             title: lectureData.title,
             description: lectureData.description,
-            startTime: dayjs(lectureData.startTime).format('YYYY-MM-DDTHH:mm'),
-            endTime: dayjs(lectureData.endTime).format('YYYY-MM-DDTHH:mm'),
             speakerId: lectureData.speaker.id,
             eventId: lectureData.eventId,
             participants: lectureData.participants.map(participant => participant.id)
@@ -88,9 +79,6 @@ async function onSubmit(data: FormValues, node: FormKitNode)
     loading.value = true;
 
     const dataToUpdate: Record<string, any> = { ...data };
-
-    dataToUpdate.startTime = dayjs(dataToUpdate.startTime).toISOString();
-    dataToUpdate.endTime = dayjs(dataToUpdate.endTime).toISOString();
 
     if (!dataToUpdate.eventId) delete dataToUpdate.eventId;
 
@@ -136,18 +124,6 @@ await fetchDataInParallel();
             >
                 <FormKit type="text" name="title" label="Lecture Title" validation="required" required />
                 <FormKit type="textarea" name="description" label="Description" />
-                <FormKit type="datetime-local" name="startTime" label="Start Time" validation="required" required />
-                <FormKit
-                    type="datetime-local"
-                    name="endTime"
-                    label="End Time"
-                    validation="required|endDateGreaterThanStart"
-                    :validation-rules="{ endDateGreaterThanStart }"
-                    :validation-messages="{
-                        endDateGreaterThanStart: 'Date of lecture end cannot be earlier than lecture starting'
-                    }"
-                    required
-                />
                 <FormKit
                     type="select"
                     label="Speaker"
@@ -156,15 +132,7 @@ await fetchDataInParallel();
                     validation="required"
                     required
                 />
-                <FormKit type="select" label="Event" name="eventId" :options="eventOptions" />
-                <FormKit
-                    type="select"
-                    label="Participants"
-                    name="participants"
-                    multiple
-                    :options="userOptions"
-                    help="Select all that apply by holding command (macOS) or control (PC)."
-                />
+                <FormKit type="select" label="Event" name="eventId" :options="eventOptions" required />
                 <UiAction :loading="loading" class="formkit-submit-button">
                     <button type="submit">
                         Submit

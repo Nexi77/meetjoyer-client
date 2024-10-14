@@ -118,6 +118,8 @@ async function onSubmit(data: FormValues, node: FormKitNode)
 
     const image = dataToCreate.image as null | { file: File, name: string }[];
 
+    if (!data.lectureIds) data.lectureIds = [];
+
     delete dataToCreate.image;
 
     if (wasImageRemoved.value && !image?.[0]?.file)
@@ -134,9 +136,6 @@ async function onSubmit(data: FormValues, node: FormKitNode)
 
     if (geolocation.value)
         dataToCreate.geolocation = geolocation.value;
-
-    if (!dataToCreate.lectureIds?.length)
-        delete dataToCreate.lectureIds;
 
     try
     {
@@ -216,8 +215,6 @@ await fetchDataInParallel();
                     name="lectureIds"
                     :options="lecturesOptions"
                     help="Select all that apply by holding command (macOS) or control (PC)."
-                    validation="required"
-                    required
                 />
                 <UiAction :loading="loading" class="formkit-submit-button">
                     <button type="submit">
