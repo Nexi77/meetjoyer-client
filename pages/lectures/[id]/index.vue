@@ -130,7 +130,7 @@ const canChatBeShown = computed(() =>
 {
     if (lectureData.value)
     {
-        return lectureData.value.participants.some(participant => participant.id === authStore.user?.id) && !eventFinished.value;
+        return (lectureData.value.participants.some(participant => participant.id === authStore.user?.id) || lectureData.value.speaker.id === authStore.user?.id) && !eventFinished.value;
     }
 
     return false;

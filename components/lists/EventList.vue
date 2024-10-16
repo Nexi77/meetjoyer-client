@@ -85,6 +85,18 @@ async function deleteLecture(id: number)
                 label="Location"
                 placeholder=""
             />
+            <FormKit
+                type="datetime-local"
+                name="startDate"
+                label="Start date"
+                placeholder=""
+            />
+            <FormKit
+                type="datetime-local"
+                name="endDate"
+                label="End date"
+                placeholder=""
+            />
         </Filters>
 
         <UiLoader v-if="loading" />

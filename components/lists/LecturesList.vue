@@ -15,7 +15,7 @@ const page = Number(route.query.page) || 1;
 const { $api, $toast } = useNuxtApp();
 const props = defineProps<Props>();
 
-createPager('lectures', page);
+createPager('lectures', page, null, 'startDate');
 
 const pager = computed(() => storeApp.pagers.lectures);
 
@@ -25,7 +25,7 @@ async function fetchLectures(filters?: Record<string, unknown>)
     {
         loading.value = true;
 
-        const { data } = await useAsyncData(`lectures-list-${props.type}`, () => $api.get<PaginatedResource<LectureModel>>('lectures', { page: pager.value?.page, limit: props.inHome ? 5 : 10, type: props.type, ...filters }));
+        const { data } = await useAsyncData(`lectures-list-${props.type}`, () => $api.get<PaginatedResource<LectureModel>>('lectures', { page: pager.value?.page, limit: props.inHome ? 5 : 10, sortBy: pager.value?.sortBy, type: props.type, ...filters }));
 
         if (!data.value)
             return;
@@ -77,6 +77,12 @@ await fetchLectures();
                 type="text"
                 name="title"
                 label="Title"
+                placeholder=""
+            />
+            <FormKit
+                type="text"
+                name="speakerEmail"
+                label="Speaker"
                 placeholder=""
             />
         </Filters>

@@ -10,7 +10,7 @@ interface FormValues {
 
 const { $api, $toast } = useNuxtApp();
 
-const { data: users } = useAsyncData(async () => await $api.get<UserData[]>('users/no-pagination'));
+const { data: users } = useAsyncData(async () => await $api.get<UserData[]>('users/no-pagination', { role: 'SPEAKER' }));
 const { data: events } = useAsyncData(async () => await $api.get<EventModel[]>('events/no-pagination'));
 
 const userOptions = computed(() => users.value?.map(user => ({ label: user.email, value: user.id })) ?? []);

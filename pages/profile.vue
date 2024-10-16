@@ -35,8 +35,11 @@ async function onSubmit(data: Data, node: FormKitNode)
             updateUserObject.image = url;
         }
 
-        updateUserObject.email = data.email;
-        updateUserObject.password = data.password;
+        if (data.email)
+            updateUserObject.email = data.email;
+
+        if (data.password)
+            updateUserObject.password = data.password;
 
         const response = await $api.patch<UserData>(`users/${authStore.user?.id}`, updateUserObject);
 
@@ -65,13 +68,13 @@ async function onSubmit(data: Data, node: FormKitNode)
         <h1>User profile</h1>
         <FormKit v-model="userFormData" type="form" @submit="onSubmit">
             <FormFileUpload label="Your image" button-text="Select your image" :image-url="authStore.userImage" @image-removed="wasImageRemoved = true" />
-            <FormKit type="email" validation="required|email" label="Email" name="email" />
+            <FormKit type="email" required validation="required|email" label="Email" name="email" />
             <FormKit
                 id="password"
                 type="password"
                 name="password"
                 label="Password"
-                validation="required|passwordRule"
+                validation="passwordRule"
                 :validation-rules="{ passwordRule }"
                 validation-visibility="blur"
                 :validation-messages="{
@@ -83,7 +86,7 @@ async function onSubmit(data: Data, node: FormKitNode)
                 type="password"
                 name="passwordConfirm"
                 label="Confirm password"
-                validation="required|confirm:password"
+                validation="confirm:password"
                 validation-visibility="blur"
                 validation-label="Passwords"
             />
