@@ -97,13 +97,7 @@ async function uploadEventImage(file: File)
 
     catch (err)
     {
-        const { $toast } = useNuxtApp();
-        const { message } = useCustomError(err as FetchErrorWithMessage);
-
-        if (message)
-            $toast.error(message);
-
-        throw new Error('We couldnt save user picture, try again!');
+        throw new Error('We couldnt save event picture, try again!');
     }
 }
 
@@ -129,9 +123,19 @@ async function onSubmit(data: FormValues, node: FormKitNode)
 
     if (image?.[0]?.file)
     {
-        const url = await uploadEventImage(image[0].file);
+        try
+        {
+            const url = await uploadEventImage(image[0].file);
 
-        dataToCreate.image = url;
+            dataToCreate.image = url;
+        }
+        catch (err)
+        {
+            $toast.error((err as Error).message);
+            loading.value = false;
+
+            return;
+        }
     }
 
     if (geolocation.value)

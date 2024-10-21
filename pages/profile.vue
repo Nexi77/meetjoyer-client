@@ -30,9 +30,18 @@ async function onSubmit(data: Data, node: FormKitNode)
 
         if (image && image[0]?.file)
         {
-            const url = await uploadImage(image[0].file);
+            try
+            {
+                const url = await uploadImage(image[0].file);
 
-            updateUserObject.image = url;
+                updateUserObject.image = url;
+            }
+            catch (err)
+            {
+                $toast.error((err as Error).message);
+
+                return;
+            }
         }
 
         if (data.email)

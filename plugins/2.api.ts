@@ -69,6 +69,18 @@ class ApiHelper implements ApiModel
         return await this.fetch<T>(url, { params });
     }
 
+    public async getBlob<T>(url: string, params: Record<string, any> = {}): Promise<T>
+    {
+        return await this.fetch<T>(url, {
+            params,
+            headers: {
+                Accept: 'application/pdf',
+                'Content-Type': 'application/json'
+            },
+            responseType: 'blob'
+        });
+    }
+
     public async post<T>(url: string, body: Record<string, any>): Promise<T>
     {
         return await this.fetch<T>(url, { method: 'POST', body });

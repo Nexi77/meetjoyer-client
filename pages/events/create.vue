@@ -39,9 +39,18 @@ async function onSubmit(data: FormValues, node: FormKitNode)
 
     if (image && image[0]?.file)
     {
-        const url = await uploadImage(image[0].file);
+        try
+        {
+            const url = await uploadImage(image[0].file);
 
-        dataToCreate.image = url;
+            dataToCreate.image = url;
+        }
+        catch (err)
+        {
+            $toast.error((err as Error).message);
+
+            return;
+        }
     }
 
     if (geolocation.value)

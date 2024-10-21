@@ -16,10 +16,8 @@ export async function uploadImage(file: File)
 
     catch (err)
     {
-        const { $toast } = useNuxtApp();
         const { message } = useCustomError(err as FetchErrorWithMessage);
 
-        if (message)
-            $toast.error(message);
+        throw new Error(message as string);
     }
 }
