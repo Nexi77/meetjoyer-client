@@ -22,7 +22,7 @@ async function fetchLectures(filters?: Record<string, unknown>)
     {
         loading.value = true;
 
-        const { data } = await useAsyncData(`lectures-list-speaker-${speakerId.value}`, () => $api.get<PaginatedResource<LectureModel>>('lectures', { page: pager.value?.page, limit: 10, speakerId: speakerId.value, ...filters }));
+        const { data } = await useAsyncData(`lectures-list-speaker-${speakerId.value}`, () => $api.get<PaginatedResource<LectureModel>>('lectures', { page: pager.value?.page, limit: 10, speakerId: speakerId.value, endDate: new Date().toISOString(), ...filters }));
 
         if (!data.value)
             return;
