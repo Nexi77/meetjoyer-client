@@ -62,7 +62,7 @@ const doIParticipate = computed(() => props.lecture.participants.some(participan
 .lecture-card {
     color: var(--black-400);
     padding: 10px 18px;
-    background-color: var(--white-400);
+    background-color: var(--lecture-bg-1);
     border-radius: var(--base-radius2);
     display: flex;
     position: relative;
@@ -72,6 +72,18 @@ const doIParticipate = computed(() => props.lecture.participants.some(participan
     max-width: 400px;
     font-size: 1rem;
     overflow: hidden;
+}
+
+.lecture-card:nth-child(2n) {
+    background-color: var(--lecture-bg-2);
+}
+
+.lecture-card:nth-child(3n) {
+    background-color: var(--lecture-bg-3);
+}
+
+.lecture-card:nth-child(4n) {
+    background-color: var(--lecture-bg-4);
 }
 
 .host {
