@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     css: ['@/assets/styles/global.scss', '@/assets/styles/reset.scss', '@/assets/fonts/fonts.css', 'vue-toastification/dist/index.css', '@/assets/styles/formkit.scss'],
     runtimeConfig: {
         public: {
-            apiUrl: 'localhost:3333'
+            apiUrl: 'http://localhost:3333'
         }
     }
 });

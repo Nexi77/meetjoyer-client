@@ -239,7 +239,12 @@ onUnmounted(() =>
   .info-block {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 10px;
+
+    @media screen and (width >= 768px) {
+       align-items: flex-start;
+    }
 
     .description {
       font-style: italic;
@@ -248,8 +253,13 @@ onUnmounted(() =>
 
     .speaker {
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 10px;
+
+      @media screen and (width >= 768px) {
+        flex-direction: row;
+      }
 
       img {
         border-radius: 50%;
